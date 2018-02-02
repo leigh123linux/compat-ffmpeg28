@@ -6,10 +6,7 @@
 
 %if 0%{?rhel}
 %global _without_frei0r   1
-%global _without_opencv   1
 %global _without_vpx      1
-%else
-%global _without_opencv   0
 %endif
 
 Summary:        Digital VCR and streaming server
@@ -60,7 +57,6 @@ BuildRequires:  libXvMC-devel
 %{!?_without_amr:BuildRequires: opencore-amr-devel vo-amrwbenc-devel}
 %{!?_without_openal:BuildRequires: openal-soft-devel}
 %{?_with_opencl:BuildRequires: opencl-headers ocl-icd-devel}
-%{!?_without_opencv:BuildRequires: opencv-devel}
 BuildRequires:  openjpeg-devel
 BuildRequires:  opus-devel
 %{!?_without_pulse:BuildRequires: pulseaudio-libs-devel}
@@ -90,19 +86,9 @@ and video, MPEG4, h263, ac3, asf, avi, real, mjpeg, and flash.
 This package is made for compatibility with older components
 It is not intended to be used in insecure environment.
 
-%package        libs
-Summary:        Libraries for %{name}
-
-%description    libs
-FFmpeg is a complete and free Internet live audio and video
-broadcasting solution for Linux/Unix. It also includes a digital
-VCR. It can encode in real time in many formats including MPEG1 audio
-and video, MPEG4, h263, ac3, asf, avi, real, mjpeg, and flash.
-This package contains the libraries for %{name}
-
 %package        devel
 Summary:        Development package for %{name}
-Requires:       %{name}-libs%{_isa} = %{version}-%{release}
+Requires:       %{name}%{_isa} = %{version}-%{release}
 Requires:       pkgconfig
 
 %description    devel
@@ -144,7 +130,6 @@ This package contains development files for %{name}
     %{?_with_nvenc:--enable-nvenc  --enable-nonfree} \\\
     %{!?_without_openal:--enable-openal} \\\
     %{?_with_opencl:--enable-opencl} \\\
-    %{!?_without_opencv:--enable-libopencv} \\\
     --enable-libopenjpeg \\\
     --enable-libopus \\\
     %{!?_without_pulse:--enable-libpulse} \\\
@@ -229,12 +214,12 @@ done
 rm -rf $RPM_BUILD_ROOT/%{_libdir}/*.so
 fi
 
-%post libs -p /sbin/ldconfig
+%ldconfig_scriptlets
 
-%postun libs -p /sbin/ldconfig
+%ldconfig_scriptlets
 
 
-%files libs
+%files
 %doc COPYING.* CREDITS README.md
 %{_libdir}/lib*.so.*
 
