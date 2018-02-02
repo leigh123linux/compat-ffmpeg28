@@ -1,9 +1,3 @@
-# TODO: add make test to %%check section
-
-#global branch  oldabi-
-#global date    20110612
-#global rel     rc1
-
 %if 0%{?rhel}
 %global _without_frei0r   1
 %global _without_vpx      1
@@ -12,18 +6,14 @@
 Summary:        Digital VCR and streaming server
 Name:           compat-ffmpeg28
 Version:        2.8.13
-Release:        1%{?date}%{?date:git}%{?rel}%{?dist}
+Release:        1%{?dist}
 %if 0%{?!_without_amr:1}
 License:        GPLv3+
 %else
 License:        GPLv2+
 %endif
 URL:            http://ffmpeg.org/
-%if 0%{?date}
-Source0:        ffmpeg-%{?branch}%{date}.tar.bz2
-%else
 Source0:        http://ffmpeg.org/releases/ffmpeg-%{version}.tar.xz
-%endif
 
 
 BuildRequires:  bzip2-devel
@@ -157,12 +147,8 @@ This package contains development files for %{name}
 
 
 %prep
-%if 0%{?date}
-%setup -q -n ffmpeg-%{?branch}%{date}
-echo "git-snapshot-%{?branch}%{date}-RPMFusion" > VERSION
-%else
 %setup -q -n ffmpeg-%{version}
-%endif
+
 # fix -O3 -g in host_cflags
 sed -i "s|check_host_cflags -O3|check_host_cflags $RPM_OPT_FLAGS|" configure
 
