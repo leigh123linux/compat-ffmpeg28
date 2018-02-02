@@ -203,8 +203,8 @@ fi
 %if 0%{?fedora} >= 28
 %ldconfig_scriptlets
 %else
-%post libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
 %endif
 
 %files
