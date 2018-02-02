@@ -214,10 +214,12 @@ done
 rm -rf $RPM_BUILD_ROOT/%{_libdir}/*.so
 fi
 
+%if 0%{?fedora} >= 28
 %ldconfig_scriptlets
-
-%ldconfig_scriptlets
-
+%else
+%post libs -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
+%endif
 
 %files
 %doc COPYING.* CREDITS README.md
